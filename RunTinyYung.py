@@ -9,24 +9,16 @@ import openpyxl
 from selenium.webdriver.chrome.options import Options
 from fake_useragent import UserAgent
 
-
 from YungData import *
 from IO.YungChorme import *
 from IO.excel import *
 from Context.YungTiny import *
-
+from IO.LoggerHelper import *
 
 #from IO import YungChorme
 #from IO.excel import *
 #from Context.YungTiny import *
 #from Filter import *
-
-
-
-
-
-
-
 
 def LoadExcelDataToHouses(sourceUrls):
     titleRow = getRowDataFromExcel(ouputFile, sheet, 0)
@@ -35,18 +27,35 @@ def LoadExcelDataToHouses(sourceUrls):
         for i, data in enumerate(rowData):
             AppenedDataToHouse(houses, titleRow[i], rowData[i])
 
+hasError = False
 driver = YungDriver()
 houses = GetHouse()
-
 ouputFile = 'D:/PythonApplication1/PythonApplication1/PythonApplication1_v1/細抓1.xlsx'
 sheet = '永慶'
 index = 15
 title = '網址'
-sourceUrls = getUrlFromExcel(ouputFile,sheet,index,title)#
 
-LoadExcelDataToHouses(sourceUrls)
-houses = YungTiny(driver,sourceUrls,houses)#
-StuffATableToExcel(houses,sheet,ouputFile)
+try:  
+    sourceUrls = getUrlFromExcel(ouputFile,sheet,index,title)
+except:
+    hasError = ErrorHandle("getUrlFromExcel")
+
+try:  
+    LoadExcelDataToHouses(sourceUrls)
+except:
+    hasError = ErrorHandle("LoadExcelDataToHouses")
+
+try:  
+    houses = YungTiny(driver,sourceUrls,houses)
+except:
+    hasError = ErrorHandle("YungTiny")
+
+try:  
+    StuffATableToExcel(houses,sheet,ouputFile)
+except:
+    hasError = ErrorHandle("StuffATableToExcel")
+
+CheckErrorHint(hasError)
 
 #主邏輯:
 #將要抓取的網址給Load
