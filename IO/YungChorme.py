@@ -8,7 +8,7 @@ def YungDriver():
     chrome_options = Options()
     chrome_options.add_argument("--incognito")
     #chrome_options.add_argument('user-agent='+ua.random)
-    driver = webdriver.Chrome('D:/PythonApplication1/PythonApplication1/python粗抓/PythonApplication1/PythonApplication1/chromedriver.exe',options=chrome_options)
+    driver = webdriver.Chrome('./chromedriver.exe',options=chrome_options)
     
     driver.get('https://buy.yungching.com.tw/region')
     return driver
